@@ -1,6 +1,6 @@
 FROM php:8.2-fpm
 
-# Instala extensões e dependências
+# Instala extensões e dependências do sistema
 RUN apt-get update && apt-get install -y \
     git \
     curl \
@@ -10,14 +10,19 @@ RUN apt-get update && apt-get install -y \
     libpng-dev \
     libxml2-dev \
     libcurl4-openssl-dev \
- && docker-php-ext-install \
-    pdo \
-    pdo_mysql \
-    mbstring \
-    zip \
-    tokenizer \
-    xml \
-    curl
+    libonig-dev \
+    pkg-config \
+    libssl-dev \
+    && docker-php-ext-configure zip \
+    && docker-php-ext-install \
+        pdo \
+        pdo_mysql \
+        mbstring \
+        zip \
+        tokenizer \
+        xml \
+        curl \
+    && apt-get clean
 
 # Instala o Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -31,7 +36,7 @@ COPY . .
 # Instala dependências do Laravel
 RUN composer install --no-dev --optimize-autoloader
 
-# Permissões (ajuste conforme necessário)
+# Ajusta permissões
 RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
 
 # Comando padrão
