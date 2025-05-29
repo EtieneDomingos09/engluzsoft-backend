@@ -1,37 +1,38 @@
-FROM php:8.1-fpm
+FROM php:8.2-fpm
 
-# Instalar dependências do sistema e PHP
+# Instala extensões e dependências
 RUN apt-get update && apt-get install -y \
     git \
     curl \
     unzip \
     zip \
-    libonig-dev \
     libzip-dev \
     libpng-dev \
     libxml2-dev \
     libcurl4-openssl-dev \
-    && docker-php-ext-install \
-        pdo \
-        pdo_mysql \
-        mbstring \
-        zip \
-        tokenizer \
-        xml \
-        curl
+ && docker-php-ext-install \
+    pdo \
+    pdo_mysql \
+    mbstring \
+    zip \
+    tokenizer \
+    xml \
+    curl
 
-# Instalar Composer
+# Instala o Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-WORKDIR /var/www/html
+# Define diretório de trabalho
+WORKDIR /var/www
 
+# Copia os arquivos da aplicação
 COPY . .
 
-# Instalar dependências Laravel
+# Instala dependências do Laravel
 RUN composer install --no-dev --optimize-autoloader
 
-RUN chown -R www-data:www-data storage bootstrap/cache
+# Permissões (ajuste conforme necessário)
+RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
 
-EXPOSE 9000
-
-CMD ["php-fpm"]
+# Comando padrão
+CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=10000"]
