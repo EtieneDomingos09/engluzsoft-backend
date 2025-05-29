@@ -11,13 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('mensagens', function (Blueprint $table) {
+        Schema::create('property_photos', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('usuario_id')->constrained('usuarios')->onDelete('cascade');
-            $table->text('conteudo');
+            $table->foreignId('property_id')->constrained()->onDelete('cascade');
+            $table->string('path'); // URL ou caminho da imagem
             $table->timestamps();
         });
-
     }
 
     /**
@@ -25,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('mensagens');
+        Schema::dropIfExists('property_photos');
     }
 };

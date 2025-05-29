@@ -30,8 +30,8 @@ class PropertySeeder extends Seeder
                 'municipio' => "Município $i",
                 'preco' => rand(80000, 500000),
                 'telefone_contato' => '999999999',
-                'latitude' => null,
-                'longitude' => null,
+                'latitude' => rand(4000, 5000),
+                'longitude' => rand(6000, 9000),
             ]);
 
             // Associar algumas características aleatórias

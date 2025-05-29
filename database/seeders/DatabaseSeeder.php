@@ -14,7 +14,7 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call([
-            UserSeeder::class,
+            //UserSeeder::class,
             /**
              * List of seeders to populate the database with initial data.
              *
@@ -29,7 +29,7 @@ class DatabaseSeeder extends Seeder
              * - ReviewSeeder: Seeds user reviews for properties.
              */
             //FeatureSeeder::class,
-            //PropertySeeder::class,
+            PropertySeeder::class,
             //PropertyPhotoSeeder::class,
             //FavoriteSeeder::class,
             //MessageSeeder::class,

@@ -11,15 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('visitas', function (Blueprint $table) {
+        Schema::create('property_views', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('usuario_id')->constrained('usuarios')->onDelete('cascade');
-            $table->foreignId('imovel_id')->constrained('imoveis')->onDelete('cascade');
-            $table->dateTime('data');
-            $table->string('status')->default('pendente'); // confirmada, cancelada...
+            $table->foreignId('property_id')->constrained('properties')->onDelete('cascade');
+            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('set null');
+            $table->string('ip_address', 45)->nullable(); // IPv6 suportado
             $table->timestamps();
         });
-
     }
 
     /**
@@ -27,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('visitas');
+        Schema::dropIfExists('property_views');
     }
 };

@@ -2,43 +2,46 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
+    // Método de login - retorna token para autenticação
     public function login(Request $request)
     {
-        $dados = $request->validate([
+        $request->validate([
             'email' => 'required|email',
-            'senha' => 'required|string',
+            'password' => 'required'
         ]);
 
-        // Mapear 'senha' para 'password' para autenticar
-        $credentials = [
-            'email' => $dados['email'],
-            'password' => $dados['senha'],
-        ];
+        $user = User::where('email', $request->email)->first();
 
-        if (!Auth::attempt($credentials)) {
-            return response()->json(['erro' => 'Credenciais inválidas'], 401);
+        // Verifica as credenciais
+        if (! $user || ! Hash::check($request->password, $user->password)) {
+            throw ValidationException::withMessages([
+                'email' => ['Credenciais inválidas.'],
+            ]);
         }
 
-        $usuario = Auth::user();
-
-        // Cria token pessoal para API via Sanctum
-        $token = $usuario->createToken('token_api')->plainTextToken;
+        // Gera o token de acesso
+        $token = $user->createToken('EngluzSoft')->plainTextToken;
 
         return response()->json([
-            'usuario' => $usuario,
             'token' => $token,
-        ], 200);
+            'user' => $user,
+        ]);
     }
 
+    // Método de logout - revoga o token do usuário
     public function logout(Request $request)
     {
-        $request->user()->tokens()->delete();
+        $request->user()->tokens->each(function ($token) {
+            $token->delete();
+        });
 
-        return response()->json(['mensagem' => 'Logout realizado com sucesso!'], 200);
+        return response()->json(['message' => 'Logout bem-sucedido']);
     }
 }

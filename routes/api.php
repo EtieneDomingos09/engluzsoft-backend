@@ -1,55 +1,60 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ImovelController;
-use App\Http\Controllers\CaracteristicaController;
-use App\Http\Controllers\FotoImovelController;
-use App\Http\Controllers\AvaliacaoController;
-use App\Http\Controllers\VisualizacaoController;
-use App\Http\Controllers\UsuarioController;
-use App\Http\Controllers\FavoritoController;
-use App\Http\Controllers\MensagemController;
-use App\Http\Controllers\VisitaController;
-use App\Http\Controllers\AuthController;
+use App\Http\Controllers\{
+    UserController,
+    PropertyController,
+    PropertyPhotoController,
+    FavoriteController,
+    FeatureController,
+    MessageController,
+    VisitController,
+    PropertyViewController,
+    ReviewController,
+    AuthController
+};
 
 // ROTAS PÚBLICAS
-Route::apiResource('imoveis', ImovelController::class)->only(['index', 'show']);
-Route::get('/caracteristicas', [CaracteristicaController::class, 'index']);
-Route::get('/imoveis/{id}/fotos', [FotoImovelController::class, 'index']);
-Route::get('/imoveis/{id}/avaliacoes', [AvaliacaoController::class, 'index']);
-Route::get('/imoveis/{id}/visualizacoes', [VisualizacaoController::class, 'index']);
-Route::post('/login', [AuthController::class, 'login'])->name('login');
-Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
+Route::apiResource('properties', PropertyController::class)->only(['index', 'show']);
+Route::get('/features', [FeatureController::class, 'index']);
+Route::get('/properties/{id}/photos', [PropertyPhotoController::class, 'index']);
+Route::get('/properties/{id}/reviews', [ReviewController::class, 'index']);
+Route::get('/properties/{id}/views', [PropertyViewController::class, 'index']);
+Route::post('/login', [AuthController::class, 'login']);
 
-// ROTAS PROTEGIDAS (autenticadas)
-Route::middleware('auth:sanctum')->group(callback: function () {
-    Route::apiResource('usuarios', UsuarioController::class);
-    Route::apiResource('imoveis', ImovelController::class)->except(['index', 'show']);
 
-    Route::post('/fotos', [FotoImovelController::class, 'store']);
-    Route::delete('/fotos/{id}', [FotoImovelController::class, 'destroy']);
+// ROTAS PROTEGIDAS (autenticado)
+Route::middleware('auth:sanctum')->group(function () {
 
-    Route::get('/usuarios/{usuarioId}/favoritos', [FavoritoController::class, 'index']);
-    Route::post('/favoritos', [FavoritoController::class, 'store']);
-    Route::delete('/favoritos', [FavoritoController::class, 'destroy']);
+    Route::apiResource('users', UserController::class);
+    Route::apiResource('properties', PropertyController::class)->except(['index', 'show']);
 
-    Route::post('/caracteristicas', [CaracteristicaController::class, 'store']);
-    Route::put('/caracteristicas/{id}', [CaracteristicaController::class, 'update']);
-    Route::delete('/caracteristicas/{id}', [CaracteristicaController::class, 'destroy']);
+    Route::post('/photos', [PropertyPhotoController::class, 'store']);
+    Route::delete('/photos/{id}', [PropertyPhotoController::class, 'destroy']);
 
-    Route::get('/usuarios/{usuarioId}/mensagens', [MensagemController::class, 'index']);
-    Route::get('/mensagens/{id}', [MensagemController::class, 'show']);
-    Route::post('/mensagens', [MensagemController::class, 'store']);
-    Route::delete('/mensagens/{id}', [MensagemController::class, 'destroy']);
+    Route::get('/users/{userId}/favorites', [FavoriteController::class, 'index']);
+    Route::post('/favorites', [FavoriteController::class, 'store']);
+    Route::delete('/favorites', [FavoriteController::class, 'destroy']);
 
-    Route::get('/usuarios/{usuarioId}/visitas', [VisitaController::class, 'index']);
-    Route::post('/visitas', [VisitaController::class, 'store']);
-    Route::put('/visitas/{id}', [VisitaController::class, 'update']);
-    Route::delete('/visitas/{id}', [VisitaController::class, 'destroy']);
+    Route::post('/features', [FeatureController::class, 'store']);
+    Route::put('/features/{id}', [FeatureController::class, 'update']);
+    Route::delete('/features/{id}', [FeatureController::class, 'destroy']);
 
-    Route::post('/visualizacoes', [VisualizacaoController::class, 'store']);
+    Route::get('/users/{userId}/messages', [MessageController::class, 'index']);
+    Route::post('/messages', [MessageController::class, 'store']);
+    Route::get('/messages/{id}', [MessageController::class, 'show']);
+    Route::delete('/messages/{id}', [MessageController::class, 'destroy']);
 
-    Route::post('/avaliacoes', [AvaliacaoController::class, 'store']);
-    Route::put('/avaliacoes/{id}', [AvaliacaoController::class, 'update']);
-    Route::delete('/avaliacoes/{id}', [AvaliacaoController::class, 'destroy']);
+    Route::get('/users/{userId}/visits', [VisitController::class, 'index']);
+    Route::post('/visits', [VisitController::class, 'store']);
+    Route::put('/visits/{id}', [VisitController::class, 'update']);
+    Route::delete('/visits/{id}', [VisitController::class, 'destroy']);
+
+    Route::post('/views', [PropertyViewController::class, 'store']);
+
+    Route::post('/reviews', [ReviewController::class, 'store']);
+    Route::put('/reviews/{id}', [ReviewController::class, 'update']);
+    Route::delete('/reviews/{id}', [ReviewController::class, 'destroy']);
+
+    Route::post('/logout', [AuthController::class, 'logout']);
 });

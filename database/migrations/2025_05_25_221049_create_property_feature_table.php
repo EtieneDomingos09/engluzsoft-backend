@@ -11,13 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('fotos_imoveis', function (Blueprint $table) {
+        Schema::create('property_feature', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('imovel_id')->constrained('imoveis')->onDelete('cascade');
-            $table->string('caminho');
+            $table->foreignId('property_id')->constrained()->onDelete('cascade');
+            $table->foreignId('feature_id')->constrained()->onDelete('cascade');
             $table->timestamps();
-        });
 
+            $table->unique(['property_id', 'feature_id']); // para evitar duplicados
+        });
     }
 
     /**
@@ -25,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('fotos_imoveis');
+        Schema::dropIfExists('property_feature');
     }
 };

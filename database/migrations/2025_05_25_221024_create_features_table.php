@@ -11,12 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('caracteristicas', function (Blueprint $table) {
+        Schema::create('features', function (Blueprint $table) {
             $table->id();
             $table->string('nome');
             $table->timestamps();
         });
-
     }
 
     /**
@@ -24,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('caracteristicas');
+        Schema::dropIfExists('features');
     }
 };

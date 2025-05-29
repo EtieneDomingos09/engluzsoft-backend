@@ -11,15 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('avaliacoes', function (Blueprint $table) {
+        Schema::create('reviews', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('usuario_id')->constrained('usuarios')->onDelete('cascade');
-            $table->foreignId('imovel_id')->constrained('imoveis')->onDelete('cascade');
-            $table->integer('nota');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade'); // quem avaliou
+            $table->foreignId('property_id')->constrained('properties')->onDelete('cascade'); // imóvel avaliado
+            $table->tinyInteger('nota')->unsigned(); // 1 a 5
             $table->text('comentario')->nullable();
             $table->timestamps();
         });
-
     }
 
     /**
@@ -27,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('avaliacoes');
+        Schema::dropIfExists('reviews');
     }
 };

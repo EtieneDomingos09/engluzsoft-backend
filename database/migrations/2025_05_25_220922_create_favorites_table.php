@@ -11,14 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('visualizacoes', function (Blueprint $table) {
+        Schema::create('favorites', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('usuario_id')->constrained('usuarios')->onDelete('cascade');
-            $table->foreignId('imovel_id')->constrained('imoveis')->onDelete('cascade');
-            $table->string('ip')->nullable();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('property_id')->constrained()->onDelete('cascade');
             $table->timestamps();
-        });
 
+            $table->unique(['user_id', 'property_id']); // um favorito por user/imóvel
+
+        });
     }
 
     /**
@@ -26,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('visualizacoes');
+        Schema::dropIfExists('favorites');
     }
 };

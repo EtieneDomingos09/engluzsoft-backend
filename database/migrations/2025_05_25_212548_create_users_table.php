@@ -11,13 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('favoritos', function (Blueprint $table) {
+        Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('usuario_id')->constrained('usuarios')->onDelete('cascade');
-            $table->foreignId('imovel_id')->constrained('imoveis')->onDelete('cascade');
+            $table->string('name');
+            $table->string('email')->unique();
+            $table->string('password');
+            $table->string('telefone_contato')->nullable();
+            $table->enum('tipo', ['proprietario', 'agente', 'administrador'])->default('proprietario');
             $table->timestamps();
         });
-
     }
 
     /**
@@ -25,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('favoritos');
+        Schema::dropIfExists('users');
     }
 };
