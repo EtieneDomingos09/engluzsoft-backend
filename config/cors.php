@@ -2,79 +2,23 @@
 
 return [
 
-    /*
-    |--------------------------------------------------------------------------
-    | Paths
-    |--------------------------------------------------------------------------
-    |
-    | Define os caminhos onde o CORS deve ser aplicado. Normalmente `api/*`.
-    |
-    */
     'paths' => ['api/*', 'sanctum/csrf-cookie'],
 
-    /*
-    |--------------------------------------------------------------------------
-    | Métodos permitidos
-    |--------------------------------------------------------------------------
-    |
-    | Pode ser ['GET', 'POST', ...] ou ['*'] para todos os métodos.
-    |
-    */
     'allowed_methods' => ['*'],
 
-    /*
-    |--------------------------------------------------------------------------
-    | Origens permitidas
-    |--------------------------------------------------------------------------
-    |
-    | Aqui você define os domínios que podem acessar sua API.
-    | Em dev: http://localhost:3000 (Next.js)
-    |
-    */
     'allowed_origins' => [
-        'http://localhost:3000',
-        // 'https://app.engluzsoft.com', // produção
+        'http://localhost:3000',               // Gildo local
+        'https://engluzsoft-frontend.vercel.app', // (exemplo) produção frontend
     ],
 
-    /*
-    |--------------------------------------------------------------------------
-    | Padrões de origem permitidos
-    |--------------------------------------------------------------------------
-    |
-    | Use isso se quiser permitir com regex. Normalmente deixado vazio.
-    |
-    */
     'allowed_origins_patterns' => [],
 
-    /*
-    |--------------------------------------------------------------------------
-    | Cabeçalhos permitidos
-    |--------------------------------------------------------------------------
-    */
     'allowed_headers' => ['*'],
 
-    /*
-    |--------------------------------------------------------------------------
-    | Cabeçalhos expostos
-    |--------------------------------------------------------------------------
-    */
     'exposed_headers' => [],
 
-    /*
-    |--------------------------------------------------------------------------
-    | Tempo de cache da pré-requisição
-    |--------------------------------------------------------------------------
-    */
     'max_age' => 0,
 
-    /*
-    |--------------------------------------------------------------------------
-    | Suporte a cookies/autenticação
-    |--------------------------------------------------------------------------
-    |
-    | Se sua API usa autenticação via cookie, mantenha como true.
-    |
-    */
     'supports_credentials' => true,
 
 ];
