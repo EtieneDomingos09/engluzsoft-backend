@@ -21,12 +21,12 @@ Route::get('/properties/{id}/photos', [PropertyPhotoController::class, 'index'])
 Route::get('/properties/{id}/reviews', [ReviewController::class, 'index']);
 Route::get('/properties/{id}/views', [PropertyViewController::class, 'index']);
 Route::post('/login', [AuthController::class, 'login']);
-
+Route::apiResource('users', UserController::class);
 
 // ROTAS PROTEGIDAS (autenticado)
 Route::middleware('auth:sanctum')->group(function () {
 
-    Route::apiResource('users', UserController::class);
+
     Route::apiResource('properties', PropertyController::class)->except(['index', 'show']);
 
     Route::post('/photos', [PropertyPhotoController::class, 'store']);
